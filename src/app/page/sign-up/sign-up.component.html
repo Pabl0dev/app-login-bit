@@ -1,0 +1,29 @@
+<div class="container">
+    <div class="content-form">
+        <form #formSignUp="ngForm" (ngSubmit)="sendData(formSignUp)">
+            <h4 class="text-uppercase text-center mb-4">Crear nueva cuenta</h4>
+    
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input class="form-control"  id="email" type="email" [(ngModel)]="user.email" name="email" required/>
+                <small *ngIf="formSignUp.submitted && formSignUp.controls['email'].errors" class="form-text text-danger font-weight-bold">Instroduzca un valor valido</small>
+            </div>
+    
+            <div class="form-group">
+                <label for="nombre">Nombres: </label>
+                <input class="form-control" id="nombre" type="text" [(ngModel)]="user.name" name="name" required/>
+                <small *ngIf="formSignUp.submitted && formSignUp.controls['name'].errors" class="form-text text-danger font-weight-bold">Instroduzca un valor valido</small>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Contraseña: </label>
+                <input class="form-control" id="password" type="password" [(ngModel)]="user.password" name="password" required/>
+                <small *ngIf="formSignUp.submitted && formSignUp.controls['password'].errors" class="form-text text-danger font-weight-bold">Instroduzca un valor valido</small>
+            </div>
+    
+            <a [routerLink]="['/login']" routerLinkActive="router-link-active" >¿Ya tienes cuenta? / ingresar</a>
+    
+            <button type="submit" class="btn btn-primary w-100 mt-3 py-3 text-uppercase">Crear Cuenta</button>
+        </form>
+    </div>
+</div>
