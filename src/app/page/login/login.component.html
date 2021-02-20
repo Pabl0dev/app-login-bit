@@ -14,6 +14,8 @@
                 <input class="form-control" id="password" type="password" [(ngModel)]="user.password" name="password" required/>
                 <small *ngIf="formLogin.submitted && formLogin.controls['password'].errors" class="form-text text-danger font-weight-bold">Instroduzca un valor valido</small>
             </div>
+
+            <p class="text-danger" *ngIf="message">{{ message }}</p>
     
             <a [routerLink]="['/register']" routerLinkActive="router-link-active" >No tengo cuenta, quiero crear una</a>
     

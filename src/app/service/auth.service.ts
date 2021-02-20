@@ -9,20 +9,35 @@ import { map } from 'rxjs/operators';
 export class AuthService {
 
   private apiKey = "AIzaSyAj93dh_j-x8NgyrKvHB_plNwaEiBUaaCs";
-  private userToken: string;
+  private userToken: string = "";
 
   constructor(private http: HttpClient) { 
-    // this.getToken()
+    this.userToken = this.getToken();
   }
 
-  login() {
+  getToken(): string {
+    return localStorage.getItem('token');
+  }
 
+  login(user: UserModel) {
+    const userData = {
+      email: user.email,
+      password: user.password,
+      returnSecureToken: true
+    }
+    return this.http.post(`https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${this.apiKey}`, userData).pipe(
+      map(res => {
+        this.saveToken(res['idToken']);
+        return res;
+      })
+    )
   }
 
   signUp(user: UserModel) {
     const  userData = {
       email: user.email,
       password: user.password,
+      displayName: user.name,
       returnSecureToken: true
     }
 
@@ -33,6 +48,16 @@ export class AuthService {
         return res;
       })
     )
+  }
+
+  logout() {
+    localStorage.clear();
+  }
+
+  isLoggeIn(): boolean {
+    this.userToken = localStorage.getItem('token') ? localStorage.getItem('token') : "";
+    let retorno = this.userToken !== "" ? true : false;
+    return retorno;
   }
 
   private saveToken(idToken: string) {

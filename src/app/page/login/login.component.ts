@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { UserModel } from 'src/app/models/User.model';
+import { Router } from '@angular/router';
+import { UserModel } from '../../models/User.model';
+import { AuthService } from '../../service/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -10,8 +12,9 @@ import { UserModel } from 'src/app/models/User.model';
 export class LoginComponent implements OnInit {
 
   user: UserModel = new UserModel();
+  message: string = "";
 
-  constructor() { }
+  constructor(private auth: AuthService, private router: Router) { }
 
   ngOnInit() {
     this.user.email = "";
@@ -19,7 +22,21 @@ export class LoginComponent implements OnInit {
   }
 
   public loginData(form: NgForm): void {
-    console.log(form);
+    if(form.invalid) {return;}
+    else {
+      this.auth.login(this.user).subscribe(res => {
+        this.router.navigateByUrl('/home');
+      },
+      error => {
+        if(error.error.error.message === 'INVALID_EMAIL') {
+          this.message = "Correo electronico no registrado...";
+        } else if(error.error.error.message === 'INVALID_PASSWORD') {
+          this.message = "Contraseña incorrecta...";
+        } else {
+          alert('Plataforma en mantenimiento. Intentelo mas tarde!');
+        }
+      })
+    }
   }
 
 }
